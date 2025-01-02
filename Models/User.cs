@@ -2,9 +2,9 @@ namespace Models
 {
     public class User
     {
-        public string Name { get; }
-        public string Email { get; }
-        public string PasswordHash { get; }
-        public string Role { get; }
+        public string Name { get; set;}
+        public string Email { get; set;}
+        public string PasswordHash { get; set;}
+        public string Role { get; set;}
     }
 }
