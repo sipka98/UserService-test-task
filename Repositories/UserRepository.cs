@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using Services;
-
+using Models;
 namespace Repositories
 {
     public class UserRepository : IUserRepository
@@ -14,22 +14,30 @@ namespace Repositories
             _databaseService = databaseService;
         }
 
-        public void CreateUser(string name, string email, string passwordHash, string role)
+        public void CreateUser(User user)
         {
             var query = "INSERT INTO Users (Name, Email, PasswordHash, Role) VALUES (@Name, @Email, @PasswordHash, @Role)";
             _databaseService.ExecuteNonQuery(query, command =>
             {
-                command.Parameters.AddWithValue("@Name", name);
-                command.Parameters.AddWithValue("@Email", email);
-                command.Parameters.AddWithValue("@PasswordHash", passwordHash);
-                command.Parameters.AddWithValue("@Role", role);
+                command.Parameters.AddWithValue("@Name", user.Name);
+                command.Parameters.AddWithValue("@Email", user.Email);
+                command.Parameters.AddWithValue("@PasswordHash", user.PasswordHash);
+                command.Parameters.AddWithValue("@Role", user.Role);
             });
         }
 
-        public List<string> GetUsers()
+        public List<User> GetUsers()
         {
-            var query = "SELECT Name FROM Users";
-            return _databaseService.ExecuteReader(query, reader => reader.GetString(0));
+            var query = "SELECT Id, Name, Email, PasswordHash, Role FROM Users";
+            return _databaseService.ExecuteReader(query, reader => new User
+            {
+                Id = reader.GetInt32(0),
+                Name = reader.GetString(1),
+                Email = reader.GetString(2),
+                PasswordHash = reader.GetString(3),
+                Role = reader.GetString(4)
+            });
+
         }
 
         public void UpdateUserRole(int userId, string newRole)
