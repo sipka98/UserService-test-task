@@ -1,24 +1,28 @@
 public class UserService
 {
+    private readonly ValidationService _validationService;
+
+    public UserService(ValidationService validationService)
+    {
+        _validationService = validationService;
+    }
+
     public void CreateUser(string name, string email, string password, string role)
     {
-        if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
-        {
-            throw new Exception("Invalid input");
-        }
-
-        var emailRegex = new System.Text.RegularExpressions.Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
-        if (!emailRegex.IsMatch(email))
-        {
-            throw new Exception("Invalid email");
-        }
+        _validationService.ValidateName(name);
+        _validationService.ValidateEmail(email);
+        _validationService.ValidatePassword(password);
+        _validationService.ValidateRole(role);
 
         var passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
 
         using (var db = new SqlConnection("connectionString"))
         {
             db.Open();
-            var command = new SqlCommand($"INSERT INTO Users (Name, Email, PasswordHash, Role) VALUES ('{name}', '{email}', '{passwordHash}', '{role}')", db);
+            var command = new SqlCommand(
+                $"INSERT INTO Users (Name, Email, PasswordHash, Role) VALUES ('{name}', '{email}', '{passwordHash}', '{role}')", 
+                db
+            );
             command.ExecuteNonQuery();
         }
     }
@@ -45,10 +49,7 @@ public class UserService
 
     public void UpdateUserRole(int userId, string newRole)
     {
-        if (newRole != "Admin" && newRole != "User")
-        {
-            throw new Exception("Invalid role");
-        }
+        _validationService.ValidateRole(newRole);
 
         using (var db = new SqlConnection("connectionString"))
         {
