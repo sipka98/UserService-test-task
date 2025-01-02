@@ -18,10 +18,7 @@ namespace Services
 
         public void CreateUser(string name, string email, string password, string role)
         {
-            _validationService.ValidateName(name);
-            _validationService.ValidateEmail(email);
-            _validationService.ValidatePassword(password);
-            _validationService.ValidateRole(role);
+            _validationService.ValidateUser(name, email, password, role);
 
             var user = new User
                 {

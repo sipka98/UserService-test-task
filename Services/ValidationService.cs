@@ -37,5 +37,13 @@ namespace Services
                 throw new ArgumentException("Invalid role");
             }
         }
+
+        public void ValidateUser(string name, string email, string password, string role)
+    {
+        ValidateName(name);
+        ValidateEmail(email);
+        ValidatePassword(password);
+        ValidateRole(role);
+    }
     }
 }
