@@ -28,14 +28,13 @@ namespace Repositories
 
         public List<User> GetUsers()
         {
-            var query = "SELECT Id, Name, Email, PasswordHash, Role FROM Users";
+            var query = "SELECT Name, Email, PasswordHash, Role FROM Users";
             return _databaseService.ExecuteReader(query, reader => new User
             {
-                Id = reader.GetInt32(0),
-                Name = reader.GetString(1),
-                Email = reader.GetString(2),
-                PasswordHash = reader.GetString(3),
-                Role = reader.GetString(4)
+                Name = reader.GetString(0),
+                Email = reader.GetString(1),
+                PasswordHash = reader.GetString(2),
+                Role = reader.GetString(3)
             });
 
         }

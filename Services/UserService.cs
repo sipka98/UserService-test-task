@@ -8,9 +8,9 @@ namespace Services
     public class UserService
     {
         private readonly IUserRepository _userRepository;
-        private readonly ValidationService _validationService;
+        private readonly IValidationService  _validationService;
 
-        public UserService(IUserRepository userRepository, ValidationService validationService)
+        public UserService(IUserRepository userRepository, IValidationService  validationService)
         {
             _userRepository = userRepository;
             _validationService = validationService;

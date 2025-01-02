@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace Services
 {
-    public class ValidationService
+    public class ValidationService : IValidationService
     {
         public void ValidateName(string name)
         {
